@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ninja Tools - Multi Tool Hub</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #d35400;
+            color: #EAEAEA;
+            line-height: 1.6;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: #2B2D42;
+            padding: 1.5rem 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            color: #FFD700;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            color: #EAEAEA;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Navigation Styles */
+        nav {
+            background-color: #1E1E2F;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #EAEAEA;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background-color: #FFD700;
+            color: #1E1E2F;
+        }
+
+        /* Main Content Styles */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        /* Tool Card Styles */
+        .tool-card {
+            background-color: #3A3D5B;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(255, 215, 0, 0.2);
+        }
+
+        .tool-card:hover {
+            background-color: #FFD700;
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(255, 215, 0, 0.3);
+        }
+
+        .tool-card:hover h2,
+        .tool-card:hover p {
+            color: #1E1E2F;
+        }
+
+        .tool-card h2 {
+            color: #FFD700;
+            margin-bottom: 0.75rem;
+            font-size: 1.5rem;
+        }
+
+        .tool-card p {
+            margin-bottom: 1.25rem;
+            color: #EAEAEA;
+            font-size: 0.95rem;
+        }
+
+        /* Button Styles */
+        .btn {
+            display: inline-block;
+            background-color: #FFD700;
+            color: #1E1E2F;
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .btn:hover {
+            background-color: #E6C200;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background-color: #3A3D5B;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .contact-section h2 {
+            color: #FFD700;
+            margin-bottom: 1rem;
+        }
+
+        .contact-email {
+            color: #FFD700;
+            font-weight: bold;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .contact-email:hover {
+            color: #E6C200;
+            text-decoration: underline;
+        }
+
+        /* Footer Styles */
+        footer {
+            background-color: #2B2D42;
+            text-align: center;
+            padding: 1.5rem 0;
+            margin-top: 2rem;
+        }
+
+        footer p {
+            color: #EAEAEA;
+            opacity: 0.8;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-links {
+                flex-direction: column;
+                align-items: center;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Ninja Tools</h1>
+        <p>Multi Tool Hub - Your one-stop solution for all utility needs</p>
+    </header>
+
+    <nav>
+        <div class="nav-container">
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#tools">Tools</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container" id="home">
+        <div class="tools-grid" id="tools">
+            <!-- Tool Card 1: Image Converter -->
+            <div class="tool-card">
+                <h2>Image Converter</h2>
+                <p>Convert your images between various formats like JPG, PNG, WEBP, and more with just a few clicks.</p>
+                <button class="btn" onclick="redirectToTool('Image Converter')">Use Tool</button>
+            </div>
+
+            <!-- Tool Card 2: Image Compressor -->
+            <div class="tool-card">
+                <h2>Image Compressor</h2>
+                <p>Reduce the file size of your images without significant quality loss. Perfect for web optimization.</p>
+                <button class="btn" onclick="redirectToTool('Image Compressor')">Use Tool</button>
+            </div>
+
+            <!-- Tool Card 3: Image Crop -->
+            <div class="tool-card">
+                <h2>Image Crop</h2>
+                <p>Crop your images to the perfect size and aspect ratio for social media, websites, or personal use.</p>
+                <button class="btn" onclick="redirectToTool('Image Crop')">Use Tool</button>
+            </div>
+
+            <!-- Tool Card 4: Video Converter -->
+            <div class="tool-card">
+                <h2>Video Converter</h2>
+                <p>Convert videos between different formats like MP4, AVI, MOV, and more with high quality output.</p>
+                <button class="btn" onclick="redirectToTool('Video Converter')">Use Tool</button>
+            </div>
+
+            <!-- Tool Card 5: Age Calculator -->
+            <div class="tool-card">
+                <h2>Age Calculator</h2>
+                <p>Calculate your exact age in years, months, and days. Perfect for birthdays and special events.</p>
+                <button class="btn" onclick="redirectToTool('Age Calculator')">Use Tool</button>
+            </div>
+
+            <!-- Tool Card 6: EMI Calculator -->
+            <div class="tool-card">
+                <h2>EMI Calculator</h2>
+                <p>Calculate your Equated Monthly Installments for loans with detailed breakdown of principal and interest.</p>
+                <button class="btn" onclick="redirectToTool('EMI Calculator')">Use Tool</button>
+            </div>
+
+            <!-- Tool Card 7: SIP Calculator -->
+            <div class="tool-card">
+                <h2>SIP Calculator</h2>
+                <p>Plan your Systematic Investment Plan returns with this powerful calculator for financial planning.</p>
+                <button class="btn" onclick="redirectToTool('SIP Calculator')">Use Tool</button>
+            </div>
+
+            <!-- Tool Card 8: Audio Trim -->
+            <div class="tool-card">
+                <h2>Audio Trim</h2>
+                <p>Trim your audio files to the perfect length. Cut, edit, and save your audio clips easily.</p>
+                <button class="btn" onclick="redirectToTool('Audio Trim')">Use Tool</button>
+            </div>
+        </div>
+
+        <!-- Contact Section -->
+        <div class="contact-section" id="contact">
+            <h2>Contact Us</h2>
+            <p>Have questions or feedback? Reach out to us via email:</p>
+            <a href="mailto:docuninja1@gmail.com" class="contact-email">docuninja1@gmail.com</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Ninja Tools. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function redirectToTool(toolName) {
+            alert(`Redirecting to ${toolName}...`);
+            // In a real implementation, you would navigate to the tool page:
+            // window.location.href = toolName.toLowerCase().replace(' ', '-') + '.html';
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
