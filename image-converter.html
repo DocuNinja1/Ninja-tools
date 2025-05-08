@@ -3,127 +3,533 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Converter - Multi Tool Hub</title>
+    <title>Image Converter | Multi Tool Hub</title>
     <style>
-        body {
-            background-color: #121212;
-            color: #ffffff;
-            font-family: Arial, sans-serif;
+        :root {
+            --primary-bg: #1E1E2F;
+            --secondary-bg: #2B2D42;
+            --card-bg: #3A3D5B;
+            --accent: #FFD700;
+            --text: #EAEAEA;
+            --error: #FF6B6B;
+            --success: #4CAF50;
+        }
+
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        .container {
-            max-width: 600px;
-            margin: 50px auto;
+
+        body {
+            background-color: var(--primary-bg);
+            color: var(--text);
+            line-height: 1.6;
             padding: 20px;
-            background-color: #1e1e1e;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
         }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
         h1 {
             text-align: center;
+            color: var(--accent);
+            margin-bottom: 30px;
         }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        input[type="file"], select, button {
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            border-radius: 5px;
-            border: none;
-            background-color: #333;
-            color: #fff;
-        }
-        button {
-            background-color: #6200ea;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #3700b3;
-        }
-        .preview {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .preview img {
-            max-width: 100%;
+
+        .converter-card {
+            background-color: var(--card-bg);
             border-radius: 10px;
-            margin-top: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
-        .loading {
+
+        .upload-section {
+            border: 2px dashed var(--accent);
+            border-radius: 8px;
+            padding: 40px 20px;
             text-align: center;
-            font-style: italic;
-            color: #aaa;
+            margin-bottom: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .upload-section:hover {
+            background-color: rgba(255, 215, 0, 0.05);
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .upload-text {
+            margin-bottom: 10px;
+        }
+
+        .file-info {
+            margin-top: 15px;
+            font-size: 14px;
+            color: var(--accent);
+        }
+
+        #file-input {
+            display: none;
+        }
+
+        .format-selection {
+            margin-bottom: 30px;
+        }
+
+        .format-selection h2 {
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .format-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .format-btn {
+            background-color: var(--secondary-bg);
+            color: var(--text);
+            border: 1px solid var(--accent);
+            border-radius: 5px;
+            padding: 8px 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .format-btn:hover {
+            background-color: var(--accent);
+            color: var(--primary-bg);
+        }
+
+        .format-btn.active {
+            background-color: var(--accent);
+            color: var(--primary-bg);
+            font-weight: bold;
+        }
+
+        .action-btn {
+            background-color: var(--accent);
+            color: var(--primary-bg);
+            border: none;
+            border-radius: 5px;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 0 auto;
+            width: 200px;
+            text-align: center;
+        }
+
+        .action-btn:hover {
+            background-color: #E6C200;
+        }
+
+        .action-btn:disabled {
+            background-color: #555;
+            cursor: not-allowed;
+        }
+
+        .result-section {
+            display: none;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .result-preview {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .download-btn {
+            background-color: var(--success);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 15px;
+        }
+
+        .download-btn:hover {
+            background-color: #45a049;
+        }
+
+        .status-message {
+            margin: 20px 0;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            display: none;
+        }
+
+        .loading {
+            color: var(--accent);
+        }
+
+        .error {
+            background-color: rgba(255, 107, 107, 0.2);
+            color: var(--error);
+            border: 1px solid var(--error);
+        }
+
+        .success {
+            background-color: rgba(76, 175, 80, 0.2);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 215, 0, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid var(--accent);
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .converter-card {
+                padding: 20px;
+            }
+
+            .upload-section {
+                padding: 30px 15px;
+            }
+
+            .format-options {
+                gap: 8px;
+            }
+
+            .format-btn {
+                padding: 6px 12px;
+                font-size: 14px;
+            }
+
+            .action-btn {
+                width: 100%;
+                max-width: 200px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 24px;
+            }
+
+            .upload-icon {
+                font-size: 36px;
+            }
+
+            .upload-text {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Image Converter</h1>
-        <div class="form-group">
-            <label for="imageInput">Upload Image:</label>
-            <input type="file" id="imageInput" accept="image/*,.pdf">
+        
+        <div class="converter-card">
+            <!-- Upload Section -->
+            <div class="upload-section" id="upload-area">
+                <div class="upload-icon">📁</div>
+                <p class="upload-text">Drag & drop your image here or click to browse</p>
+                <p class="file-info" id="file-info">No file selected</p>
+                <input type="file" id="file-input" accept=".pdf,.png,.jpg,.jpeg,.bmp,.gif,.tiff,.webp,image/*">
+            </div>
+
+            <!-- Format Selection -->
+            <div class="format-selection">
+                <h2>Select Output Format</h2>
+                <div class="format-options">
+                    <button class="format-btn" data-format="png">PNG</button>
+                    <button class="format-btn" data-format="jpg">JPG</button>
+                    <button class="format-btn" data-format="jpeg">JPEG</button>
+                    <button class="format-btn" data-format="webp">WEBP</button>
+                    <button class="format-btn" data-format="bmp">BMP</button>
+                    <button class="format-btn" data-format="gif">GIF</button>
+                    <button class="format-btn" data-format="tiff">TIFF</button>
+                    <button class="format-btn" data-format="pdf">PDF</button>
+                </div>
+            </div>
+
+            <!-- Status Messages -->
+            <div class="status-message error" id="error-message"></div>
+            <div class="status-message success" id="success-message"></div>
+            <div class="spinner" id="spinner"></div>
+
+            <!-- Convert Button -->
+            <button class="action-btn" id="convert-btn" disabled>Convert Image</button>
+
+            <!-- Result Section -->
+            <div class="result-section" id="result-section">
+                <h2>Converted Image</h2>
+                <img class="result-preview" id="result-preview" src="#" alt="Converted Image">
+                <a class="download-btn" id="download-btn" download="converted-image">Download Image</a>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="formatSelect">Select Output Format:</label>
-            <select id="formatSelect">
-                <option value="png">PNG</option>
-                <option value="jpg">JPG</option>
-                <option value="jpeg">JPEG</option>
-                <option value="bmp">BMP</option>
-                <option value="gif">GIF</option>
-                <option value="webp">WEBP</option>
-                <option value="tiff">TIFF</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <button onclick="convertImage()">Convert</button>
-        </div>
-        <div id="status" class="loading"></div>
-        <div id="preview" class="preview"></div>
     </div>
 
     <script>
-        let uploadedImage;
+        // DOM Elements
+        const uploadArea = document.getElementById('upload-area');
+        const fileInput = document.getElementById('file-input');
+        const fileInfo = document.getElementById('file-info');
+        const formatBtns = document.querySelectorAll('.format-btn');
+        const convertBtn = document.getElementById('convert-btn');
+        const resultSection = document.getElementById('result-section');
+        const resultPreview = document.getElementById('result-preview');
+        const downloadBtn = document.getElementById('download-btn');
+        const errorMessage = document.getElementById('error-message');
+        const successMessage = document.getElementById('success-message');
+        const spinner = document.getElementById('spinner');
 
-        document.getElementById('imageInput').addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const validTypes = ["image/png", "image/jpeg", "image/jpg", "image/bmp", "image/gif", "image/tiff", "image/webp"];
-            if (!validTypes.includes(file.type)) {
-                alert("Unsupported file type!");
-                return;
-            }
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                uploadedImage = new Image();
-                uploadedImage.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
+        // Variables
+        let selectedFile = null;
+        let selectedFormat = 'png';
+        let convertedBlob = null;
+
+        // Event Listeners
+        uploadArea.addEventListener('click', () => fileInput.click());
+        uploadArea.addEventListener('dragover', handleDragOver);
+        uploadArea.addEventListener('dragleave', handleDragLeave);
+        uploadArea.addEventListener('drop', handleDrop);
+        fileInput.addEventListener('change', handleFileSelect);
+        convertBtn.addEventListener('click', convertImage);
+
+        // Format selection
+        formatBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                formatBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                selectedFormat = btn.dataset.format;
+            });
         });
 
-        function convertImage() {
-            if (!uploadedImage) {
-                alert("Please upload an image first.");
+        // Set PNG as default selected format
+        document.querySelector('.format-btn[data-format="png"]').classList.add('active');
+
+        // Functions
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadArea.style.backgroundColor = 'rgba(255, 215, 0, 0.1)';
+        }
+
+        function handleDragLeave(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadArea.style.backgroundColor = '';
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadArea.style.backgroundColor = '';
+
+            const files = e.dataTransfer.files;
+            if (files.length) {
+                handleFile(files[0]);
+            }
+        }
+
+        function handleFileSelect(e) {
+            if (e.target.files.length) {
+                handleFile(e.target.files[0]);
+            }
+        }
+
+        function handleFile(file) {
+            // Check file type
+            const validTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/bmp', 'image/gif', 'image/tiff', 'image/webp', 'application/pdf'];
+            
+            if (!validTypes.includes(file.type) {
+                showError('Unsupported file type. Please upload an image file.');
                 return;
             }
-            const format = document.getElementById("formatSelect").value;
-            const canvas = document.createElement("canvas");
-            const ctx = canvas.getContext("2d");
-            canvas.width = uploadedImage.width;
-            canvas.height = uploadedImage.height;
-            ctx.drawImage(uploadedImage, 0, 0);
-            document.getElementById("status").textContent = "Processing image...";
 
-            setTimeout(() => {
-                const mimeType = `image/${format}`;
-                const dataURL = canvas.toDataURL(mimeType);
+            // Check file size (10MB limit)
+            if (file.size > 10 * 1024 * 1024) {
+                showError('File is too large. Maximum size is 10MB.');
+                return;
+            }
 
-                const preview = document.getElementById("preview");
-                preview.innerHTML = `<img src="${dataURL}" alt="Converted Image"/><br><a href="${dataURL}" download="converted.${format}"><button>Download Image</button></a>`;
-                document.getElementById("status").textContent = "";
-            }, 500);
+            selectedFile = file;
+            fileInfo.textContent = `${file.name} (${formatFileSize(file.size)})`;
+            convertBtn.disabled = false;
+            hideError();
+        }
+
+        function convertImage() {
+            if (!selectedFile) {
+                showError('Please select a file first.');
+                return;
+            }
+
+            // Show loading state
+            convertBtn.disabled = true;
+            spinner.style.display = 'block';
+            hideError();
+            hideSuccess();
+
+            // Process the image
+            setTimeout(() => { // Using setTimeout to simulate processing delay
+                processImage(selectedFile, selectedFormat)
+                    .then(blob => {
+                        convertedBlob = blob;
+                        displayResult(blob);
+                    })
+                    .catch(error => {
+                        showError('Conversion failed: ' + error.message);
+                        convertBtn.disabled = false;
+                    })
+                    .finally(() => {
+                        spinner.style.display = 'none';
+                    });
+            }, 1000);
+        }
+
+        function processImage(file, targetFormat) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+
+                reader.onload = function(event) {
+                    // For PDF files, we'll just return the original (can't convert PDF to image in this simple implementation)
+                    if (file.type === 'application/pdf') {
+                        if (targetFormat === 'pdf') {
+                            resolve(file);
+                        } else {
+                            reject(new Error('PDF to image conversion not supported in this demo.'));
+                        }
+                        return;
+                    }
+
+                    const img = new Image();
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        
+                        // Set canvas dimensions
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        
+                        // Draw image on canvas
+                        ctx.drawImage(img, 0, 0);
+                        
+                        // Convert to target format
+                        let mimeType;
+                        switch(targetFormat) {
+                            case 'png': mimeType = 'image/png'; break;
+                            case 'jpg':
+                            case 'jpeg': mimeType = 'image/jpeg'; break;
+                            case 'webp': mimeType = 'image/webp'; break;
+                            case 'bmp': mimeType = 'image/bmp'; break;
+                            case 'gif': mimeType = 'image/gif'; break;
+                            case 'tiff': mimeType = 'image/tiff'; break;
+                            case 'pdf': 
+                                // In a real implementation, you'd use a PDF library here
+                                mimeType = 'application/pdf';
+                                break;
+                            default: mimeType = 'image/png';
+                        }
+                        
+                        // Convert canvas to blob
+                        canvas.toBlob(blob => {
+                            if (blob) {
+                                resolve(blob);
+                            } else {
+                                reject(new Error('Conversion failed'));
+                            }
+                        }, mimeType, 0.92); // 0.92 quality for JPEG/WEBP
+                    };
+                    
+                    img.onerror = function() {
+                        reject(new Error('Failed to load image'));
+                    };
+                    
+                    img.src = event.target.result;
+                };
+                
+                reader.onerror = function() {
+                    reject(new Error('Failed to read file'));
+                };
+                
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function displayResult(blob) {
+            const url = URL.createObjectURL(blob);
+            resultPreview.src = url;
+            downloadBtn.href = url;
+            downloadBtn.download = `converted-image.${selectedFormat}`;
+            resultSection.style.display = 'block';
+            convertBtn.disabled = false;
+            showSuccess('Image converted successfully!');
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2) + ' ' + sizes[i];
+        }
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            successMessage.style.display = 'none';
+        }
+
+        function hideError() {
+            errorMessage.style.display = 'none';
+        }
+
+        function showSuccess(message) {
+            successMessage.textContent = message;
+            successMessage.style.display = 'block';
+            errorMessage.style.display = 'none';
+        }
+
+        function hideSuccess() {
+            successMessage.style.display = 'none';
         }
     </script>
 </body>
