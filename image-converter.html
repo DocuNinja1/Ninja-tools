@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Converter - Multi Tool Hub</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #1e1e1e;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        }
+        h1 {
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        input[type="file"], select, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: none;
+            background-color: #333;
+            color: #fff;
+        }
+        button {
+            background-color: #6200ea;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #3700b3;
+        }
+        .preview {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .preview img {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+        .loading {
+            text-align: center;
+            font-style: italic;
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Image Converter</h1>
+        <div class="form-group">
+            <label for="imageInput">Upload Image:</label>
+            <input type="file" id="imageInput" accept="image/*,.pdf">
+        </div>
+        <div class="form-group">
+            <label for="formatSelect">Select Output Format:</label>
+            <select id="formatSelect">
+                <option value="png">PNG</option>
+                <option value="jpg">JPG</option>
+                <option value="jpeg">JPEG</option>
+                <option value="bmp">BMP</option>
+                <option value="gif">GIF</option>
+                <option value="webp">WEBP</option>
+                <option value="tiff">TIFF</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <button onclick="convertImage()">Convert</button>
+        </div>
+        <div id="status" class="loading"></div>
+        <div id="preview" class="preview"></div>
+    </div>
+
+    <script>
+        let uploadedImage;
+
+        document.getElementById('imageInput').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const validTypes = ["image/png", "image/jpeg", "image/jpg", "image/bmp", "image/gif", "image/tiff", "image/webp"];
+            if (!validTypes.includes(file.type)) {
+                alert("Unsupported file type!");
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                uploadedImage = new Image();
+                uploadedImage.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        function convertImage() {
+            if (!uploadedImage) {
+                alert("Please upload an image first.");
+                return;
+            }
+            const format = document.getElementById("formatSelect").value;
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+            canvas.width = uploadedImage.width;
+            canvas.height = uploadedImage.height;
+            ctx.drawImage(uploadedImage, 0, 0);
+            document.getElementById("status").textContent = "Processing image...";
+
+            setTimeout(() => {
+                const mimeType = `image/${format}`;
+                const dataURL = canvas.toDataURL(mimeType);
+
+                const preview = document.getElementById("preview");
+                preview.innerHTML = `<img src="${dataURL}" alt="Converted Image"/><br><a href="${dataURL}" download="converted.${format}"><button>Download Image</button></a>`;
+                document.getElementById("status").textContent = "";
+            }, 500);
+        }
+    </script>
+</body>
+</html>
